@@ -1,15 +1,23 @@
 <template>
-  <hello-world />
+  <div>
+    <login-panel />
+    <article-list />
+    <hello-world />
+  </div>
 </template>
 
 <script>
-  import HelloWorld from '../components/HelloWorld'
+  import LoginPanel from '../components/LoginPanel.vue';
+  import ArticleList from '../components/ArticleList.vue';
+  import HelloWorld from '../components/HelloWorld.vue';
 
   export default {
     name: 'HomeView',
 
     components: {
-      HelloWorld,
+      LoginPanel,
+      ArticleList,
+      HelloWorld
     },
   }
 </script>

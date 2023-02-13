@@ -15,7 +15,7 @@
     }),
     methods: {
       ajaxTest() {
-        axios.post(this.baseUrl + 'test', {
+        axios.post(this.baseUrl + 'login', {
         userID: 'hong',
         userPW: '1234'
       })

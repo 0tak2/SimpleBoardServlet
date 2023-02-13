@@ -1,6 +1,9 @@
 package member.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -8,7 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.google.gson.Gson;
+
+import common.vo.BasicResponse;
 import member.service.MemberService;
+import member.vo.LoginRequest;
+import member.vo.LoginResponse;
 import member.vo.Member;
 
 /**
@@ -31,10 +39,17 @@ public class LoginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 1. [입력] 뷰로부터 입력을 받음
-		request.setCharacterEncoding("UTF-8");
-		String userID = request.getParameter("userID");
-		String userPW = request.getParameter("userPW");
-		String nextUrl = request.getParameter("nextUrl");
+		StringBuffer buff = new StringBuffer();
+		String line = null;
+		BufferedReader reader = request.getReader();
+		while((line = reader.readLine()) != null) {
+			buff.append(line);
+		}
+		
+		LoginRequest req = new Gson().fromJson(buff.toString(), LoginRequest.class);
+		
+		String userID = req.getUserID();
+		String userPW = req.getUserPW();
 		
 		// 2. [로직] 서비스로 VO 넘김
 		Member member = new Member();
@@ -52,6 +67,7 @@ public class LoginServlet extends HttpServlet {
 		// 로그인에 실패하면 null 리턴	
 		
 		// 3. [출력] 뷰로 넘김
+		LoginResponse resp = null;
 		if (result != null) {
 			// 로그인 성공
 			// 1. 로그인 세션 생성
@@ -63,19 +79,23 @@ public class LoginServlet extends HttpServlet {
 			HttpSession session = request.getSession(true);
 			session.setAttribute("member", result); // VO 자체를 저장
 			
-			if (!nextUrl.equals("null")) {
-				response.sendRedirect(nextUrl);
-			} else {
-				response.sendRedirect("main");
-			}
+			Member userInfo = new Member();
+			userInfo.setMemberId(result.getMemberId());
+			userInfo.setMemberName(result.getMemberPw());
 			
+		    resp = new LoginResponse(true, "로그인에 성공하였습니다.", userInfo);
 		} else {
 			// 로그인 실패
 			// 오류 페이지 전송 (HTML)
 			//    -- 정적 페이지이므로 HTML을 보내준다.
-			
-			response.sendRedirect("loginFail.html"); // 리다이렉트 = 다시 접속하라고 응답함
+		    resp = new LoginResponse(false, "로그인에 실패하였습니다.", null);
+
 		}
+		
+		response.setContentType("application/json; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+	    out.print(new Gson().toJson(resp));
+	    out.close();
 	}
 
 }

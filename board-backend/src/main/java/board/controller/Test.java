@@ -43,12 +43,12 @@ public class Test extends HttpServlet {
 		
 		response.setContentType("application/json");
 
-	    PrintWriter writer = response.getWriter();
+	    PrintWriter out = response.getWriter();
 
-	    writer.print("{ \r\n" +
+	    out.print("{ \r\n" +
 	        "\"apple\":1000\r\n" +
 	        "}");
-	    writer.close();
+	    out.close();
 	}
 
 }
