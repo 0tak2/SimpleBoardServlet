@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 @WebFilter("/*")
 public class CORSInterceptor extends HttpFilter implements Filter {
     
+	private static final long serialVersionUID = 1L;
+	
 	private static final String[] allowedOrigins = {
 			"http://127.0.0.1:8081", "http://localhost:8081",
 	};
@@ -43,15 +45,17 @@ public class CORSInterceptor extends HttpFilter implements Filter {
 	 */
 	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
-
         String requestOrigin = request.getHeader("Origin");
+        System.out.println("Entered: " + requestOrigin);
         if(isAllowedOrigin(requestOrigin)) {
+        	System.out.println("Verified");
             // Authorize the origin, all headers, and all methods
+        	((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Credentials", "true");
             ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Origin", requestOrigin);
-            ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Headers", "*");
+            ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Headers", "Content-Type, x-requested-with, Accept");
             ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods",
                     "GET, OPTIONS, HEAD, PUT, POST, DELETE");
-
+            
             HttpServletResponse resp = (HttpServletResponse) servletResponse;
 
             // CORS handshake (pre-flight request)

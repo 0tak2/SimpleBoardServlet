@@ -3,6 +3,8 @@ package member.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,9 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
-import common.vo.BasicResponse;
 import member.service.MemberService;
-import member.vo.LoginRequest;
 import member.vo.LoginResponse;
 import member.vo.Member;
 
@@ -46,10 +46,10 @@ public class LoginServlet extends HttpServlet {
 			buff.append(line);
 		}
 		
-		LoginRequest req = new Gson().fromJson(buff.toString(), LoginRequest.class);
+		Map req = new Gson().fromJson(buff.toString(), Map.class);
 		
-		String userID = req.getUserID();
-		String userPW = req.getUserPW();
+		String userID = (String) req.get("userID");
+		String userPW = (String) req.get("userPW");
 		
 		// 2. [로직] 서비스로 VO 넘김
 		Member member = new Member();
@@ -67,15 +67,9 @@ public class LoginServlet extends HttpServlet {
 		// 로그인에 실패하면 null 리턴	
 		
 		// 3. [출력] 뷰로 넘김
-		LoginResponse resp = null;
+		Map<String, Object> resp = new HashMap<String, Object>();
 		if (result != null) {
 			// 로그인 성공
-			// 1. 로그인 세션 생성
-			//    -- 서비스는 '비즈니스 로직'을 처리하는 '일반 자바 클래스'이므로.
-			//    -- 세션 처리는 서블릿에서 한다.
-			// 2. 게시판 페이지 전송 (JSP)
-			//    -- 동적 페이지이므로 JSP를 보내준다.
-			
 			HttpSession session = request.getSession(true);
 			session.setAttribute("member", result); // VO 자체를 저장
 			
@@ -83,13 +77,15 @@ public class LoginServlet extends HttpServlet {
 			userInfo.setMemberId(result.getMemberId());
 			userInfo.setMemberName(result.getMemberPw());
 			
-		    resp = new LoginResponse(true, "로그인에 성공하였습니다.", userInfo);
+			response.setStatus(HttpServletResponse.SC_OK);
+			resp.put("success", new Boolean(true));
+			resp.put("msg", "로그인에 성공하였습니다.");
+			resp.put("userInfo", userInfo);
 		} else {
 			// 로그인 실패
-			// 오류 페이지 전송 (HTML)
-			//    -- 정적 페이지이므로 HTML을 보내준다.
-		    resp = new LoginResponse(false, "로그인에 실패하였습니다.", null);
-
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			resp.put("success", new Boolean(false));
+			resp.put("msg", "로그인에 실패하였습니다.");
 		}
 		
 		response.setContentType("application/json; charset=UTF-8");

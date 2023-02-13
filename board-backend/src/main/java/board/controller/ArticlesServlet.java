@@ -1,14 +1,19 @@
 package board.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.Gson;
+
 import board.service.BoardService;
 import board.vo.ArticleExtended;
 import common.login.CheckLogin;
@@ -16,14 +21,14 @@ import common.login.CheckLogin;
 /**
  * Servlet implementation class BoardMain
  */
-@WebServlet("/main")
-public class BoardMain extends HttpServlet {
+@WebServlet("/article")
+public class ArticlesServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardMain() {
+    public ArticlesServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,14 +47,15 @@ public class BoardMain extends HttpServlet {
 		BoardService service = new BoardService();
 		list = service.getAllArticles();
 		
-		// 게시판 JSP(=Servlet)로 이동 => 서블릿에서 서블릿으로 이동
-		// HTML 페이지로 이동하는 것과 다름. RequestDispatcher(JSP_Location) 사용
-		RequestDispatcher dispatcher
-			= request.getRequestDispatcher("main.jsp");
-		
-		request.setAttribute("boardList", list); // 세션이 아닌 request에 불러온 게시글을 넣고 JSP에 넘긴다
-		
-		dispatcher.forward(request, response); // 해당 JSP에 현재 Request와 Response 객체를 넘기며 제어권을 넘긴다.
+		response.setContentType("application/json; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+
+		Map<String, Object> resp = new HashMap<String, Object>();
+		resp.put("success", new Boolean(true));
+		resp.put("msg", "게시물 가져오기에 성공하였습니다.");
+		resp.put("articles", list);
+	    out.print(new Gson().toJson(resp));
+	    out.close();
 	}
 
 	/**
