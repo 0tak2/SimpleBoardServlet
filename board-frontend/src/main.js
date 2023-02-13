@@ -5,6 +5,8 @@ import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
+Vue.prototype.baseUrl = 'http://localhost:8080/board/';
+
 new Vue({
   router,
   vuetify,
