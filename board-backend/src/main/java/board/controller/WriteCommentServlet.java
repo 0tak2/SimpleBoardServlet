@@ -1,7 +1,9 @@
 package board.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
 
 import board.service.BoardService;
 import board.vo.Comment;
@@ -35,20 +39,36 @@ public class WriteCommentServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 검사
-		boolean isLogin = CheckLogin.checkLogin(request, response, "main");
+		boolean isLogin = CheckLogin.checkLogin(request, response);
 		if (!isLogin) {
 			return;
 		}
 		
 		// 1. 입력
+//		HttpSession session = request.getSession();
+//		request.setCharacterEncoding("UTF-8");
+//		int articleNum = Integer.parseInt(request.getParameter("articleNum"));
+//		
+//		Member currentUser = (Member) session.getAttribute("member");
+
+//		
+//		String commentContent = request.getParameter("commentContent");
 		HttpSession session = request.getSession();
-		request.setCharacterEncoding("UTF-8");
-		int articleNum = Integer.parseInt(request.getParameter("articleNum"));
-		
-		Member currentUser = (Member) session.getAttribute("member");
+		Member currentUser = (Member)session.getAttribute("member");
 		String commentAuthor = currentUser.getMemberId();
 		
-		String commentContent = request.getParameter("commentContent");
+		request.setCharacterEncoding("UTF-8");
+		StringBuffer buff = new StringBuffer();
+		String line = null;
+		BufferedReader reader = request.getReader();
+		while((line = reader.readLine()) != null) {
+			buff.append(line);
+		}
+		
+		Map<String, String> req = new Gson().fromJson(buff.toString(), Map.class);
+		
+		String commentContent = req.get("commentContent");		
+		int articleNum = Integer.parseInt(req.get("articleNum"));
 		
 		// 2. 로직
 		BoardService service = new BoardService();

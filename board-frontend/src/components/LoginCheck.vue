@@ -6,7 +6,9 @@
 export default {
     created() {
         if (this.$store.state.userID === '' ||
-            this.$store.state.userName === '') {
+            this.$store.state.userID === null ||
+            this.$store.state.userName === '' ||
+            this.$store.state.userName === null) {
                 this.$router.push({ name: 'login'});
         }
     }

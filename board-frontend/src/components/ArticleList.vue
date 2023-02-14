@@ -57,6 +57,10 @@ export default {
       this.articles = result.data.articles;
     })
     .catch((error) => {
+      if (error.response.status === 401) {
+          this.$router.push({ name: 'login'});
+          return;
+      }
       console.error('[Error] 전체 게시글 불러오기');
       console.error(error);
     })

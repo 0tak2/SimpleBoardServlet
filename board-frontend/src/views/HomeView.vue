@@ -6,7 +6,9 @@
         <user-panel />
       </v-col>
       <v-col cols=8 offset=1>
-        <router-link :to="{ name: 'writeArticle' }">글쓰기</router-link>
+        <div class="text-right">
+          <router-link :to="{ name: 'writeArticle' }">글쓰기</router-link>
+        </div>
         <article-list />
       </v-col>
     </v-row>

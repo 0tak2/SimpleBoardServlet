@@ -18,14 +18,14 @@ import member.vo.Member;
 /**
  * Servlet implementation class CommentAjax
  */
-@WebServlet("/ajax/deleteComment")
-public class DeleteCommentAjax extends HttpServlet {
+@WebServlet("/deleteComment")
+public class DeleteCommentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public DeleteCommentAjax() {
+    public DeleteCommentServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

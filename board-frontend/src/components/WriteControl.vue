@@ -39,6 +39,10 @@ export default {
                 this.$router.push({ name: 'home'});
             })
             .catch((error) => {
+                if (error.response.status === 401) {
+                    this.$router.push({ name: 'login'});
+                    return;
+                }
                 console.error('[Error] 게시글 작성')
                 console.error(error);
             })

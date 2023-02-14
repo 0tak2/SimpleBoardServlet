@@ -19,13 +19,13 @@ import member.vo.Member;
  * Servlet implementation class CommentAjax
  */
 @WebServlet("/ajax/editComment")
-public class EditCommentAjax extends HttpServlet {
+public class EditCommentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public EditCommentAjax() {
+    public EditCommentServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

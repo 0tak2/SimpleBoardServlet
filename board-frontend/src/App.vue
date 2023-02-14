@@ -20,10 +20,10 @@
 
 export default {
   name: 'App',
-
-  data: () => ({
-    //
-  }),
+  created() {
+    this.$store.state.userID = localStorage.getItem("userID");
+    this.$store.state.userName = localStorage.getItem("userName");
+  },
 };
 </script>
 

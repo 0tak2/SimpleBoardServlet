@@ -62,6 +62,10 @@ export default {
             console.log('[Success] 수정 전 게시글 불러오기');
         })
         .catch((error) => {
+            if (error.response.status === 401) {
+                this.$router.push({ name: 'login'});
+                return;
+            }
             console.error('[Error] 수정 전 게시글 불러오기');
             console.error(error);
         })

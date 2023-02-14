@@ -38,11 +38,13 @@ export default {
             },
             { withCredentials: true })
             .then((response) => {
-                console.log(response);
+                console.log('[Success] 로그인');
                 const userInfo = response.data.userInfo;
-                console.log(userInfo);
                 this.$store.state.userID = userInfo.memberId;
                 this.$store.state.userName = userInfo.memberName;
+
+                localStorage.setItem("userID", userInfo.memberId);
+                localStorage.setItem("userName", userInfo.memberName);
 
                 this.$router.push({ name: 'home'});
             })
