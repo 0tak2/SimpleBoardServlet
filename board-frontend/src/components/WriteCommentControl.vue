@@ -5,7 +5,7 @@
         label="댓글 내용"
         required
     ></v-text-field>
-    <v-btn @click="requestLogin">작성 완료</v-btn>
+    <v-btn @click="requestEdit">작성 완료</v-btn>
   </div>
 </template>
 
@@ -21,8 +21,8 @@ export default {
         }
     },
     methods: {
-        requestLogin() {
-            axios.post(this.baseUrl + 'writeComment', {
+        requestEdit() {
+            axios.post(this.baseUrl + 'comment', {
                 commentContent: this.commentContent,
                 articleNum: String(this.articleNum)
             },
@@ -53,6 +53,6 @@ div {
 }
 
 .v-btn {
-    margin-top: 10px;
+    margin-top: 18px;
 }
 </style>

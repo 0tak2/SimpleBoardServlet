@@ -8,7 +8,15 @@
 
         <v-card-subtitle>
             작성자: {{ article.articleAuthor }}<br>
-            작성일자: {{ article.articleDate }}
+            작성일자: {{ article.articleDate }}<br>
+            <span :class="didLike ? 'indigo--text' : ''" >
+                {{ article.articleLike }}
+            </span>명이 좋아합니다
+            <v-btn x-small text @click="requestLike">
+                <v-icon small>
+                    {{ didLike ? 'mdi-thumb-down' : 'mdi-thumb-up' }}
+                </v-icon>
+            </v-btn>
         </v-card-subtitle>
         
         <v-card-text>
@@ -20,7 +28,11 @@
     <router-link 
         v-if="article.articleAuthor === $store.state.userID"
         :to="{ name: 'editArticle', params: { articleNum: article.articleNum }}"
-    >수정</router-link>
+    >수정</router-link> &nbsp;
+    <a
+        v-if="article.articleAuthor === $store.state.userID"
+        @click.prevent="requestDelete"
+    >삭제</a>
 
     <div class="comments-wrapper">
         <div class="text-h6">
@@ -50,6 +62,74 @@ export default {
             article: {},
             comments: [],
             didLike: false
+        }
+    },
+    methods: {
+        requestDelete() {
+            axios.delete(this.baseUrl + 'article/' + this.articleNum,
+            {
+                withCredentials: true
+            })
+            .then((result) => {
+                console.log(result);
+                console.log('[Success] 게시글 삭제');
+                this.$router.push({ name: 'home' });
+            })
+            .catch((error) => {
+                console.log(error);
+                if (error.response.status === 401) {
+                    this.$router.push({ name: 'login'});
+                    return;
+                }
+                console.error('[Error] 게시글 삭제');
+                console.error(error);
+            })
+        },
+        requestLike() {
+            if (!this.didLike) { // 좋아요 안한 상태 -> 좋아요 추가
+                axios.post(this.baseUrl + 'like', {
+                    articleNum: String(this.article.articleNum)
+                },
+                {
+                    withCredentials: true
+                })
+                .then((result) => {
+                    console.log(result);
+                    console.log('[Success] 좋아요 추가');
+                    this.$router.go(0);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response.status === 401) {
+                        this.$router.push({ name: 'login'});
+                        return;
+                    }
+                    console.error('[Error] 좋아요 추가');
+                    console.error(error);
+                })
+            } else { // 좋아요 한 상태 -> 좋아요 제거
+                axios.delete(this.baseUrl + 'like',
+                {
+                    data: {
+                        articleNum: String(this.article.articleNum)
+                    },
+                    withCredentials: true
+                })
+                .then((result) => {
+                    console.log(result);
+                    console.log('[Success] 좋아요 취소');
+                    this.$router.go(0);
+                })
+                .catch((error) => {
+                    console.log(error);
+                    if (error.response.status === 401) {
+                        this.$router.push({ name: 'login'});
+                        return;
+                    }
+                    console.error('[Error] 좋아요 취소');
+                    console.error(error);
+                })
+            }
         }
     },
     mounted() {
@@ -82,5 +162,8 @@ export default {
 }
 .comments-wrapper {
     margin-top: 24px;
+}
+a {
+    text-decoration-line: underline;
 }
 </style>

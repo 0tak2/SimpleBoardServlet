@@ -26,7 +26,7 @@ export default {
     },
     methods: {
         submitArticle() {
-            axios.post(this.baseUrl + 'writeArticle', {
+            axios.post(this.baseUrl + 'article', {
                 articleTitle: this.articleTitle,
                 articleContent: this.articleContent
             },
@@ -45,7 +45,7 @@ export default {
                 }
                 console.error('[Error] 게시글 작성')
                 console.error(error);
-            })
+            });
         }
     }
 }

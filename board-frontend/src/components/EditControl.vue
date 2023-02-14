@@ -19,7 +19,7 @@
 import axios from 'axios';
 export default {
     props: {
-        articleNum: Number
+        articleNum: String
     },
     data() {
         return {
@@ -29,8 +29,7 @@ export default {
     },
     methods: {
         submitArticle() {
-            axios.post(this.baseUrl + 'editArticle', {
-                articleNum: String(this.articleNum),
+            axios.put(this.baseUrl + 'article/' + this.articleNum, {
                 articleTitle: this.articleTitle,
                 articleContent: this.articleContent
             },
