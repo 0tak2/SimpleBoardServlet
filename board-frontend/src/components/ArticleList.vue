@@ -29,7 +29,7 @@
           :key="item.articleNum"
         >
           <td>{{ item.articleNum }}</td>
-          <td>{{ item.articleTitle }}</td>
+          <td><router-link :to="{ name: 'viewArticle', params: { articleNum: item.articleNum }}">{{ item.articleTitle }}</router-link></td>
           <td>{{ item.memberName }}</td>
           <td>{{ item.articleDate }}</td>
           <td>{{ item.articleComments }}</td>
@@ -50,7 +50,7 @@ export default {
     }
   },
   mounted() {
-    axios.get(this.baseUrl + '/article',
+    axios.get(this.baseUrl + 'article',
         { withCredentials: true })
     .then((result) => {
       console.log('[Success] 전체 게시글 불러오기');

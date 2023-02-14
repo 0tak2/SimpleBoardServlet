@@ -6,7 +6,7 @@ import store from  './store.js'
 
 Vue.config.productionTip = false
 
-Vue.prototype.baseUrl = 'http://localhost:8080/board/';
+Vue.prototype.baseUrl = 'http://localhost:8080/boardApi/';
 
 new Vue({
   router,

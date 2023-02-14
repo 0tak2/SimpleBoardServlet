@@ -1,7 +1,10 @@
 package board.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
 
 import board.service.BoardService;
 import board.vo.ArticleExtended;
@@ -31,14 +36,6 @@ public class WriteArticleServlet extends HttpServlet {
     }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -54,8 +51,17 @@ public class WriteArticleServlet extends HttpServlet {
 		String articleAuthor = currentUser.getMemberId();
 		
 		request.setCharacterEncoding("UTF-8");
-		String articleTitle = request.getParameter("articleTitle");
-		String articleContent = request.getParameter("articleContent");
+		StringBuffer buff = new StringBuffer();
+		String line = null;
+		BufferedReader reader = request.getReader();
+		while((line = reader.readLine()) != null) {
+			buff.append(line);
+		}
+		
+		Map<String, String> req = new Gson().fromJson(buff.toString(), Map.class);
+		
+		String articleTitle = req.get("articleTitle");
+		String articleContent = req.get("articleContent");
 		
 		// 2. 로직
 		BoardService service = new BoardService();
@@ -63,17 +69,21 @@ public class WriteArticleServlet extends HttpServlet {
 		boolean success = service.writeArticle(newArticle);
 		
 		// 3. 출력
-		response.setContentType("text/html; charset=UTF-8");
-		PrintWriter out = response.getWriter();
-		out.println("<html><script>");
+		response.setContentType("application/json; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+
+		Map<String, Object> resp = new HashMap<String, Object>();
 		
 		if (success) {
-			out.println("alert('성공'); window.location.href='main';");
+			resp.put("success", new Boolean(true));
+			resp.put("msg", "게시글을 성공적으로 작성했습니다.");
 		} else {
-			out.println("alert('실패'); window.location.href='main';");
+			resp.put("success", new Boolean(false));
+			resp.put("msg", "게시글을 작성하는데 실패했습니다.");
 		}
-
-		out.println("</script></html>");
+		
+	    out.print(new Gson().toJson(resp));
+	    out.close();
 	}
 
 }

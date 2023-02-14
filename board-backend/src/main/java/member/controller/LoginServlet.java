@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 import member.service.MemberService;
-import member.vo.LoginResponse;
 import member.vo.Member;
 
 /**
@@ -46,10 +45,10 @@ public class LoginServlet extends HttpServlet {
 			buff.append(line);
 		}
 		
-		Map req = new Gson().fromJson(buff.toString(), Map.class);
+		Map<String, String> req = new Gson().fromJson(buff.toString(), Map.class);
 		
-		String userID = (String) req.get("userID");
-		String userPW = (String) req.get("userPW");
+		String userID = req.get("userID");
+		String userPW = req.get("userPW");
 		
 		// 2. [로직] 서비스로 VO 넘김
 		Member member = new Member();
@@ -75,7 +74,7 @@ public class LoginServlet extends HttpServlet {
 			
 			Member userInfo = new Member();
 			userInfo.setMemberId(result.getMemberId());
-			userInfo.setMemberName(result.getMemberPw());
+			userInfo.setMemberName(result.getMemberName());
 			
 			response.setStatus(HttpServletResponse.SC_OK);
 			resp.put("success", new Boolean(true));

@@ -1,9 +1,16 @@
 <template>
-  <div>
+  <v-container>
     <login-check />
-    <user-panel />
-    <article-list />
-  </div>
+    <v-row>
+      <v-col cols=3>
+        <user-panel />
+      </v-col>
+      <v-col cols=8 offset=1>
+        <router-link :to="{ name: 'writeArticle' }">글쓰기</router-link>
+        <article-list />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

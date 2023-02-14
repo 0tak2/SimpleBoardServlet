@@ -1,7 +1,11 @@
 package board.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +14,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.google.gson.Gson;
 
 import board.service.BoardService;
 import board.vo.ArticleExtended;
@@ -21,7 +27,7 @@ import member.vo.Member;
 /**
  * Servlet implementation class ArticleContentServlet
  */
-@WebServlet("/viewArticle")
+@WebServlet("/article/*")
 public class ArticleContentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -47,7 +53,8 @@ public class ArticleContentServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		Member currentUser = (Member)session.getAttribute("member");
 		
-		int articleId = Integer.parseInt(request.getParameter("articleId"));
+		String[] urlChunks = request.getRequestURL().toString().split("/");
+		int articleId = Integer.parseInt(urlChunks[urlChunks.length-1]);
 		
 		// 2. 로직
 		BoardService service = new BoardService();
@@ -69,15 +76,18 @@ public class ArticleContentServlet extends HttpServlet {
 			didLike = false;
 		}
 		
-		// 3. 뷰
-		RequestDispatcher dispatcher
-			= request.getRequestDispatcher("viewArticle.jsp");
-		
-		request.setAttribute("article", result);
-		request.setAttribute("comments", commentsList);
-		request.setAttribute("didLike", didLike);
-		
-		dispatcher.forward(request, response); // 해당 JSP에 현재 Request와 Response 객체를 넘기며 제어권을 넘긴다.
+		// 3. 출력
+		response.setContentType("application/json; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+
+		Map<String, Object> resp = new HashMap<String, Object>();
+		resp.put("success", new Boolean(true));
+		resp.put("msg", "게시글을 성공적으로 불러왔습니다.");
+		resp.put("article", result);
+		resp.put("comments", commentsList);
+		resp.put("didLike", didLike);
+	    out.print(new Gson().toJson(resp));
+	    out.close();
 	}
 
 	/**
