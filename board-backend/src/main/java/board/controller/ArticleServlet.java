@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 import board.service.BoardService;
+import board.vo.Article;
 import board.vo.ArticleExtended;
 import board.vo.Comment;
 import board.vo.Like;
@@ -59,7 +60,6 @@ public class ArticleServlet extends HttpServlet {
 			list = service.getAllArticles();
 			
 			response.setContentType("application/json; charset=UTF-8");
-		    PrintWriter out = response.getWriter();
 		    
 		    if (list != null) {
 				resp.put("success", new Boolean(true));
@@ -78,7 +78,7 @@ public class ArticleServlet extends HttpServlet {
 			
 			int articleNum = Integer.parseInt(urlChunks[urlChunks.length-1]);
 			BoardService service = new BoardService();
-			ArticleExtended articleParam = new ArticleExtended();
+			Article articleParam = new Article();
 			articleParam.setArticleNum(articleNum);
 			ArticleExtended result = service.getArticle(articleParam);
 			
@@ -140,7 +140,7 @@ public class ArticleServlet extends HttpServlet {
 		
 		// 2. 로직
 		BoardService service = new BoardService();
-		ArticleExtended newArticle = new ArticleExtended(articleTitle, articleContent, articleAuthor);
+		Article newArticle = new Article(articleTitle, articleContent, articleAuthor);
 		boolean success = service.writeArticle(newArticle);
 		
 		// 3. 출력
@@ -199,7 +199,7 @@ public class ArticleServlet extends HttpServlet {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		
 		//  현재 로그인 사용자가 게시글 작성자인지 확인 후 수정
-		ArticleExtended param = new ArticleExtended();
+		Article param = new Article();
 		param.setArticleNum(articleNum);
 		param.setArticleTitle(articleTitle);
 		param.setArticleContent(articleContent);
@@ -252,7 +252,7 @@ public class ArticleServlet extends HttpServlet {
 		Map<String, Object> resp = new HashMap<String, Object>();
 		
 		//  현재 로그인 사용자가 게시글 작성자인지 확인 후 삭제
-		ArticleExtended param = new ArticleExtended();
+		Article param = new Article();
 		param.setArticleNum(articleNum);
 		ArticleExtended article = service.getArticle(param);
 		if (article.getArticleAuthor().equals(currentUser.getMemberId())) {

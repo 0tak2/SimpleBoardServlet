@@ -7,7 +7,7 @@ import CKEditor from '@ckeditor/ckeditor5-vue2';
 
 Vue.config.productionTip = false;
 
-Vue.prototype.baseUrl = 'http://localhost:8080/boardApi/';
+Vue.prototype.baseUrl = 'http://192.168.0.159:8080/boardApi/';
 
 Vue.use(CKEditor);
 

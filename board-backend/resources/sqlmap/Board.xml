@@ -28,7 +28,7 @@
 		]]>
 	</select>
 	
-	<select id="selectOneArticle" parameterType="ArticleExtended" resultType="ArticleExtended">		
+	<select id="selectOneArticle" parameterType="Article" resultType="ArticleExtended">		
 		<![CDATA[
 			SELECT articleNum, articleTitle, articleContent, articleAuthor, memberName, articleDate, IF(likeCount IS NULL, 0, likeCount) AS articleLike
 			FROM articles A
@@ -44,7 +44,7 @@
 		]]>
 	</select>
 	
-	<select id="selectAllComments" parameterType="ArticleExtended" resultType="Comment">		
+	<select id="selectAllComments" parameterType="Article" resultType="Comment">		
 		<![CDATA[
 			SELECT commentNum, commentContent, commentAuthor, memberName, commentDate, commentArticle
 			FROM comments C
@@ -73,7 +73,7 @@
 		]]>
 	</select>
 	
-	<insert id="insertArticle" parameterType="ArticleExtended">
+	<insert id="insertArticle" parameterType="Article">
 		<![CDATA[
 			INSERT INTO articles(articleTitle, articleAuthor, articleContent)
 			VALUES(#{articleTitle}, #{articleAuthor}, #{articleContent});
@@ -94,7 +94,7 @@
 		]]>
 	</insert>
 	
-	<delete id="deleteArticle" parameterType="ArticleExtended">
+	<delete id="deleteArticle" parameterType="Article">
 		<![CDATA[
 			DELETE FROM articles
 			WHERE articleNum = #{articleNum}
@@ -116,7 +116,7 @@
 		]]>
 	</delete>
 	
-	<update id="updateArticle" parameterType="ArticleExtended">
+	<update id="updateArticle" parameterType="Article">
 		<![CDATA[
 			UPDATE articles
 			SET articleTitle=#{articleTitle}, articleContent=#{articleContent}

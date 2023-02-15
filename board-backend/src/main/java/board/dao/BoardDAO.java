@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
 
+import board.vo.Article;
 import board.vo.ArticleExtended;
 import board.vo.Comment;
 import board.vo.Like;
@@ -28,28 +29,28 @@ public class BoardDAO {
 		}
 		return result;
 	}
-
-	public ArticleExtended selectOneArticle(ArticleExtended param) {
+	
+	public ArticleExtended selectOneArticle(Article articleParam) {
 		ArticleExtended result = null;
 		try {
-			result = session.selectOne("myBoard.selectOneArticle", param);			
+			result = session.selectOne("myBoard.selectOneArticle", articleParam);			
 		} catch (Exception e) {
 			throw e;
 		}
 		return result;
 	}
-
-	public int insertArticle(ArticleExtended param) {
+	
+	public int insertArticle(Article newArticle) {
 		int affectedRows = 0;
 		try {
-			affectedRows = session.insert("myBoard.insertArticle", param);
+			affectedRows = session.insert("myBoard.insertArticle", newArticle);
 		} catch (Exception e) {
 			throw e;
 		}
 		return affectedRows;
 	}
 
-	public int editArticle(ArticleExtended param) {
+	public int editArticle(Article param) {
 		int affectedRows = 0;
 		try {
 			affectedRows = session.update("myBoard.updateArticle", param);
@@ -59,7 +60,7 @@ public class BoardDAO {
 		return affectedRows;
 	}
 
-	public int deleteArticle(ArticleExtended param) {
+	public int deleteArticle(Article param) {
 		int affectedRows = 0;
 		try {
 			affectedRows = session.delete("myBoard.deleteArticle", param);

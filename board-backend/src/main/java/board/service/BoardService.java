@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.session.SqlSession;
 
 import board.dao.BoardDAO;
+import board.vo.Article;
 import board.vo.ArticleExtended;
 import board.vo.Comment;
 import board.vo.Like;
@@ -24,22 +25,22 @@ public class BoardService {
 		return list;
 	}
 
-	public ArticleExtended getArticle(ArticleExtended param) {	
+	public ArticleExtended getArticle(Article articleParam) {	
 		ArticleExtended result = null;
 		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession();) {
 			BoardDAO dao = new BoardDAO(sqlSession);
-			result = dao.selectOneArticle(param);
+			result = dao.selectOneArticle(articleParam);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return result;
 	}
 
-	public boolean writeArticle(ArticleExtended param) {
+	public boolean writeArticle(Article newArticle) {
 		boolean result = false;
 		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
 			BoardDAO dao = new BoardDAO(sqlSession);
-			int affectedRows = dao.insertArticle(param);
+			int affectedRows = dao.insertArticle(newArticle);
 			
 			if (affectedRows  == 1) {
 				sqlSession.commit();
@@ -54,7 +55,7 @@ public class BoardService {
 		return result;
 	}
 
-	public boolean editArticle(ArticleExtended param) {
+	public boolean editArticle(Article param) {
 		boolean result = false;
 		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
 			BoardDAO dao = new BoardDAO(sqlSession);
@@ -75,7 +76,7 @@ public class BoardService {
 		return result;
 	}
 
-	public boolean deleteArticle(ArticleExtended param) {
+	public boolean deleteArticle(Article param) {
 		boolean result = false;
 		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
 			BoardDAO dao = new BoardDAO(sqlSession);
