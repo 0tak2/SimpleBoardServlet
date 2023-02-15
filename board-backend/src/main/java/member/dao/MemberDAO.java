@@ -2,16 +2,24 @@ package member.dao;
 
 import org.apache.ibatis.session.SqlSession;
 
-import common.mybatis.MyBatisConnectionFactory;
 import member.vo.Member;
 public class MemberDAO {
+	private SqlSession session;
 
+	public MemberDAO() {
+	}
+
+	public MemberDAO(SqlSession session) {
+		this.session = session;
+	}
+	
 	public Member select(Member member) {
-		// 데이터베이스 처리 - MyBatis 이용
-		SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession();
-		Member result = sqlSession.selectOne("myMember.login", member); // 트랜잭션 처리는 우선 넘긴다
-		sqlSession.close();
-
+		Member result = null;
+		try {
+			result = session.selectOne("myMember.login", member);		
+		} catch (Exception e) {
+			throw e;
+		}
 		return result;
 	}
 

@@ -5,24 +5,44 @@
         label="제목"
         required
     ></v-text-field>
-    <v-textarea
+    <ckeditor
+        :editor="editor"
         v-model="articleContent"
-        label="내용"
-        required
-    ></v-textarea>
-    <v-btn @click="submitArticle">작성 완료</v-btn>
-    <v-btn @click="() => $router.push({ name: 'home'})">돌아가기</v-btn>
-  </v-form>
+        :config="editorConfig"
+    >
+    </ckeditor>
+    <div class="controls">
+        <v-btn @click="submitArticle">작성 완료</v-btn>
+        <v-btn @click="() => $router.push({ name: 'home'})">돌아가기</v-btn>
+    </div>
+    </v-form>
 </template>
 
 <script>
 import axios from 'axios';
+import CKEditor from '@ckeditor/ckeditor5-vue2';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 export default {
     data() {
         return {
             articleTitle: '',
-            articleContent: ''
+            articleContent: '',
+            editor: ClassicEditor,
+            editorConfig: {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                    ]
+                }
+            }
         }
+    },
+    components: {
+        ckeditor: CKEditor.component
     },
     methods: {
         submitArticle() {
@@ -52,5 +72,7 @@ export default {
 </script>
 
 <style>
-
+.controls {
+    margin-top: 15px;
+}
 </style>

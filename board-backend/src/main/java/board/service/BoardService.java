@@ -1,6 +1,5 @@
 package board.service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.session.SqlSession;
@@ -60,9 +59,10 @@ public class BoardService {
 		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
 			BoardDAO dao = new BoardDAO(sqlSession);
 			
-			int affectedRows = dao.insertArticle(param);
+			int affectedRows = dao.editArticle(param);
 			
 			if (affectedRows  == 1) {
+				System.out.println(param.getArticleContent());
 				sqlSession.commit();
 				result = true;
 			} else {

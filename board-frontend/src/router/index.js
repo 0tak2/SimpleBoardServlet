@@ -34,6 +34,16 @@ const routes = [
     name: 'editArticle',
     component: EditView
   },
+  // {
+  //   path: '/member/register',
+  //   name: 'registerMember',
+  //   component: EditView
+  // },
+  // {
+  //   path: '/member/edit',
+  //   name: 'editMemberInfo',
+  //   component: EditView
+  // },
 ]
 
 const router = new VueRouter({

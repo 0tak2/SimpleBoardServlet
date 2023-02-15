@@ -19,8 +19,7 @@
             </v-btn>
         </v-card-subtitle>
         
-        <v-card-text>
-            {{ article.articleContent }}
+        <v-card-text v-html="article.articleContent">
         </v-card-text>
     </v-card>
 
@@ -76,7 +75,6 @@ export default {
                 this.$router.push({ name: 'home' });
             })
             .catch((error) => {
-                console.log(error);
                 if (error.response.status === 401) {
                     this.$router.push({ name: 'login'});
                     return;
@@ -99,7 +97,6 @@ export default {
                     this.$router.go(0);
                 })
                 .catch((error) => {
-                    console.log(error);
                     if (error.response.status === 401) {
                         this.$router.push({ name: 'login'});
                         return;

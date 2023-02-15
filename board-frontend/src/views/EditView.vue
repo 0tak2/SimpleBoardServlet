@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <login-check />
-    <edit-control :articleNum="$route.params.articleNum" />
+    <edit-control :articleNum="Number($route.params.articleNum)" />
   </v-container>
 </template>
 

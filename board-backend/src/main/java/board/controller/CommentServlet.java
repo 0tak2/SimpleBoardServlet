@@ -16,7 +16,6 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 
 import board.service.BoardService;
-import board.vo.ArticleExtended;
 import board.vo.Comment;
 import common.util.CheckLogin;
 import member.vo.Member;

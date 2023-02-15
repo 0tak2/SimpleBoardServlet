@@ -5,27 +5,47 @@
         label="제목"
         required
     ></v-text-field>
-    <v-textarea
+    <ckeditor
+        :editor="editor"
         v-model="articleContent"
-        label="내용"
-        required
-    ></v-textarea>
-    <v-btn @click="submitArticle">수정 완료</v-btn>
-    <v-btn @click="() => $router.push({ name: 'viewArticle', params: { articleNum: articleNum }})">돌아가기</v-btn>
+        :config="editorConfig"
+    >
+    </ckeditor>
+    <div class="controls">
+        <v-btn @click="submitArticle">수정 완료</v-btn>
+        <v-btn @click="() => $router.push({ name: 'viewArticle', params: { articleNum: articleNum }})">돌아가기</v-btn>
+    </div>
   </v-form>
 </template>
 
 <script>
 import axios from 'axios';
+import CKEditor from '@ckeditor/ckeditor5-vue2';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
 export default {
     props: {
-        articleNum: String
+        articleNum: Number
     },
     data() {
         return {
             articleTitle: '',
-            articleContent: ''
+            articleContent: '',
+            editor: ClassicEditor,
+            editorConfig: {
+                toolbar: [ 'heading', '|', 'bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote' ],
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' }
+                    ]
+                }
+            }
         }
+    },
+    components: {
+        ckeditor: CKEditor.component
     },
     methods: {
         submitArticle() {
@@ -44,6 +64,10 @@ export default {
                 }});
             })
             .catch((error) => {
+                if (error.response.status === 401) {
+                    this.$router.push({ name: 'login'});
+                    return;
+                }
                 console.error('[Error] 게시글 수정')
                 console.error(error);
             })
@@ -73,5 +97,7 @@ export default {
 </script>
 
 <style>
-
+.controls {
+    margin-top: 15px;
+}
 </style>
