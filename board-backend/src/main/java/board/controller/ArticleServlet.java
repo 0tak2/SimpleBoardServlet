@@ -20,7 +20,7 @@ import board.service.BoardService;
 import board.vo.ArticleExtended;
 import board.vo.Comment;
 import board.vo.Like;
-import common.login.CheckLogin;
+import common.util.CheckLogin;
 import member.vo.Member;
 
 /**
@@ -60,10 +60,16 @@ public class ArticleServlet extends HttpServlet {
 			
 			response.setContentType("application/json; charset=UTF-8");
 		    PrintWriter out = response.getWriter();
-
-			resp.put("success", new Boolean(true));
-			resp.put("msg", "전체 게시글을 성공적으로 가져왔습니다.");
-			resp.put("articles", list);
+		    
+		    if (list != null) {
+				resp.put("success", new Boolean(true));
+				resp.put("msg", "전체 게시글을 성공적으로 가져왔습니다.");
+				resp.put("articles", list);
+		    } else {
+		    	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				resp.put("success", new Boolean(false));
+				resp.put("msg", "게시글을 가져오는데 실패했습니다.");
+		    }
 		} else {
 			// 특정 게시글 조회
 			// 	/boardApi/article/:articleNum
@@ -147,6 +153,7 @@ public class ArticleServlet extends HttpServlet {
 			resp.put("success", new Boolean(true));
 			resp.put("msg", "게시글을 성공적으로 작성했습니다.");
 		} else {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			resp.put("success", new Boolean(false));
 			resp.put("msg", "게시글을 작성하는데 실패했습니다.");
 		}
@@ -208,7 +215,7 @@ public class ArticleServlet extends HttpServlet {
 			}
 		} else {
 			resp.put("success", new Boolean(false));
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			resp.put("msg", "작성자만 게시글을 수정할 수 있습니다.");
 		}
 		
@@ -259,7 +266,7 @@ public class ArticleServlet extends HttpServlet {
 			}
 		} else {
 			resp.put("success", new Boolean(false));
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			resp.put("msg", "작성자만 게시글을 삭제할 수 있습니다.");
 		}
 		

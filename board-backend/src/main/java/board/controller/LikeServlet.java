@@ -17,7 +17,8 @@ import com.google.gson.Gson;
 
 import board.service.BoardService;
 import board.vo.Like;
-import common.login.CheckLogin;
+import common.service.ServiceResult;
+import common.util.CheckLogin;
 import member.vo.Member;
 
 /**
@@ -67,20 +68,24 @@ public class LikeServlet extends HttpServlet {
 		param.setLikeArticle(articleNum);
 		param.setLikeMemberId(currentUser.getMemberId());
 
-		boolean result = service.setLike(param);
+		ServiceResult result = service.setLike(param);
 		
 		// 3. 출력
 		// 응답 객체
 		Map<String, Object> resp = new HashMap<String, Object>();
 
-		if (result) {
+		if (result == ServiceResult.SUCCESS) {
 			resp.put("success", new Boolean(true));
 			response.setStatus(HttpServletResponse.SC_OK);
 			resp.put("msg", "좋아요를 성공적으로 추가했습니다.");
+		} else if(result == ServiceResult.FAILED) {
+			resp.put("success", new Boolean(false));
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			resp.put("msg", "좋아요 추가에 실패했습니다.");
 		} else {
 			resp.put("success", new Boolean(false));
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			resp.put("msg", "좋아요 추가에 실패했습니다.");
+			resp.put("msg", "좋아요 추가에 실패했습니다. 이미 좋아요 처리된 게시글입니다.");
 		}
 
 		response.setContentType("application/json; charset=UTF-8");
@@ -133,7 +138,7 @@ public class LikeServlet extends HttpServlet {
 			resp.put("msg", "좋아요를 성공적으로 취소했습니다.");
 		} else {
 			resp.put("success", new Boolean(false));
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			resp.put("msg", "좋아요 취소에 실패했습니다.");
 		}
 

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
-import common.login.CheckLogin;
+import common.util.CheckLogin;
 
 /**
  * Servlet implementation class LogoutServlet

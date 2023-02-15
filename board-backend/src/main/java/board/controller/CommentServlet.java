@@ -18,7 +18,7 @@ import com.google.gson.Gson;
 import board.service.BoardService;
 import board.vo.ArticleExtended;
 import board.vo.Comment;
-import common.login.CheckLogin;
+import common.util.CheckLogin;
 import member.vo.Member;
 
 /**
@@ -79,7 +79,7 @@ public class CommentServlet extends HttpServlet {
 			resp.put("msg", "댓글을 성공적으로 작성했습니다.");
 		} else {
 			resp.put("success", new Boolean(false));
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			resp.put("msg", "댓글 작성에 실패했습니다.");
 		}
 
@@ -131,9 +131,9 @@ public class CommentServlet extends HttpServlet {
 
 		Comment comment = service.getOneComment(param);
 		if (comment.getCommentAuthor().equals(currentUser.getMemberId())) {
-			Comment successDB = service.editComment(param);
+			boolean successDB = service.editComment(param);
 			resp.put("success", successDB);
-			if (successDB != null) {
+			if (successDB) {
 				resp.put("msg", "댓글을 성공적으로 수정했습니다.");				
 			} else {
 				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -141,7 +141,7 @@ public class CommentServlet extends HttpServlet {
 			}
 		} else {
 			resp.put("success", new Boolean(false));
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			resp.put("msg", "작성자만 댓글을 수정할 수 있습니다.");
 		}
 		
@@ -192,7 +192,7 @@ public class CommentServlet extends HttpServlet {
 			}
 		} else {
 			resp.put("success", new Boolean(false));
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 			resp.put("msg", "작성자만 댓글을 삭제할 수 있습니다.");
 		}
 		
