@@ -27,7 +27,7 @@
                     <div class="message">
                         <span v-if="userID === ''">생략할 수 없습니다</span>
                         <span v-if="userID.length > 10">10자를 넘을 수 없습니다</span>
-                        <span v-if="userID !== '' && !checkResult">사용할 수 없는 아이디입니다.</span>
+                        <span v-if="userID !== '' && !checkResult">사용할 수 없는 아이디입니다</span>
                     </div>
                 </div>
 
