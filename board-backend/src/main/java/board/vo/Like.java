@@ -1,26 +1,16 @@
 package board.vo;
 
 public class Like {
-	private int likeNum;
 	private String likeMemberId;
 	private int likeArticle;
 	
 	public Like() {
 	}
 
-	public Like(int likeNum, String likeMemberId, int likeArticle) {
+	public Like(String likeMemberId, int likeArticle) {
 		super();
-		this.likeNum = likeNum;
 		this.likeMemberId = likeMemberId;
 		this.likeArticle = likeArticle;
-	}
-
-	public int getLikeNum() {
-		return likeNum;
-	}
-
-	public void setLikeNum(int likeNum) {
-		this.likeNum = likeNum;
 	}
 
 	public String getLikeMemberId() {

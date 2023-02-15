@@ -13,7 +13,7 @@
 			INNER JOIN members M
 			ON A.articleAuthor = M.memberId
 			LEFT JOIN (
-				SELECT likeArticle, COUNT(likeNum) AS likeCount
+				SELECT likeArticle, COUNT(likeMemberId) AS likeCount
 				FROM likes
 				GROUP BY likeArticle
 			) L
@@ -35,7 +35,7 @@
 			INNER JOIN members M
 			ON A.articleAuthor = M.memberId
 			LEFT JOIN (
-				SELECT likeArticle, COUNT(likeNum) AS likeCount
+				SELECT likeArticle, COUNT(likeMemberId) AS likeCount
 				FROM likes
 				GROUP BY likeArticle
 			) L
@@ -67,7 +67,7 @@
 	
 	<select id="selectLike" parameterType="Like" resultType="Like">
 		<![CDATA[
-			SELECT likeNum, likeMemberId, likeArticle
+			SELECT likeMemberId, likeArticle
 			FROM likes
 			WHERE likeArticle = #{likeArticle} AND likeMemberId = #{likeMemberId}
 		]]>
