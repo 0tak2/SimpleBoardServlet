@@ -19,7 +19,7 @@ INSERT INTO members VALUES('lim', '임영택', '1234');
 CREATE TABLE articles (
 	articleNum  INTEGER  NOT NULL PRIMARY KEY auto_increment,
 	articleTitle  VARCHAR(30)  NOT NULL,
-	articleContent  VARCHAR(256)  NOT NULL,
+	articleContent  VARCHAR(1024)  NOT NULL,
 	articleAuthor  VARCHAR(10),
 	articleDate  DATETIME  NOT NULL DEFAULT NOW(),
 	FOREIGN KEY (articleAuthor) REFERENCES members(memberId)
@@ -52,11 +52,11 @@ INSERT INTO comments(commentContent, commentAuthor, commentArticle)
 
 -- 좋아요 테이블 만들기
 CREATE TABLE likes (
-	likeNum  INTEGER  NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	likeMemberId  VARCHAR(10),
 	likeArticle  INTEGER,
 	FOREIGN KEY (likeMemberId) REFERENCES members(memberId),
-	FOREIGN KEY (likeArticle) REFERENCES articles(articleNum) ON DELETE CASCADE
+	FOREIGN KEY (likeArticle) REFERENCES articles(articleNum) ON DELETE CASCADE,
+	PRIMARY KEY (likeMemberId, likeArticle)
 );
 
 -- 좋아요 테이블 테스트 데이터
