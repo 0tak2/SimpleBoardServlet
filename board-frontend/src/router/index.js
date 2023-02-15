@@ -5,6 +5,7 @@ import LoginView from '../views/LoginView.vue'
 import ArticleView from '../views/ArticleView.vue'
 import WriteView from '../views/WriteView.vue'
 import EditView from '../views/EditView.vue';
+import RegisterView from '../views/RegisterView.vue';
 
 Vue.use(VueRouter)
 
@@ -20,30 +21,25 @@ const routes = [
     component: LoginView
   },
   {
-    path: '/:articleNum',
-    name: 'viewArticle',
-    component: ArticleView
-  },
-  {
     path: '/write',
     name: 'writeArticle',
     component: WriteView
+  },
+  {
+    path: '/:articleNum',
+    name: 'viewArticle',
+    component: ArticleView
   },
   {
     path: '/edit/:articleNum',
     name: 'editArticle',
     component: EditView
   },
-  // {
-  //   path: '/member/register',
-  //   name: 'registerMember',
-  //   component: EditView
-  // },
-  // {
-  //   path: '/member/edit',
-  //   name: 'editMemberInfo',
-  //   component: EditView
-  // },
+  {
+    path: '/member/register',
+    name: 'registerMember',
+    component: RegisterView
+  }
 ]
 
 const router = new VueRouter({

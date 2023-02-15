@@ -16,11 +16,31 @@ public class MemberDAO {
 	public Member select(Member member) {
 		Member result = null;
 		try {
+			result = session.selectOne("myMember.select", member);		
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+
+	public Member selectByIdAndPw(Member member) {
+		Member result = null;
+		try {
 			result = session.selectOne("myMember.login", member);		
 		} catch (Exception e) {
 			throw e;
 		}
 		return result;
+	}
+
+	public int insert(Member member) {
+		int affectedRows = 0;
+		try {
+			affectedRows = session.insert("myMember.insert", member);
+		} catch (Exception e) {
+			throw e;
+		}
+		return affectedRows;
 	}
 
 }

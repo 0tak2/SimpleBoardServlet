@@ -75,4 +75,7 @@ export default {
 .controls {
     margin-top: 15px;
 }
+.ck-editor__editable_inline {
+    min-height: 500px;
+}
 </style>

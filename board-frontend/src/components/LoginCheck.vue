@@ -9,6 +9,7 @@ export default {
             this.$store.state.userID === null ||
             this.$store.state.userName === '' ||
             this.$store.state.userName === null) {
+                console.log("[LoginCheck] Not Logined");
                 this.$router.push({ name: 'login'});
         }
     }
