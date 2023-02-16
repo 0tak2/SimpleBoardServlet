@@ -53,9 +53,8 @@ export default {
             {
                 withCredentials: true
             })
-            .then((result) =>{
+            .then(() =>{
                 console.log('[Success] 게시글 작성')
-                console.log(result);
                 this.$router.push({ name: 'home'});
             })
             .catch((error) => {

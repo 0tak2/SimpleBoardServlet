@@ -65,12 +65,15 @@ export default {
     },
     methods: {
         requestDelete() {
+            if(!confirm('정말로 삭제하시겠습니까? 이 작업은 돌이킬 수 없습니다.')) {
+                return;
+            }
+
             axios.delete(this.baseUrl + 'article/' + this.articleNum,
             {
                 withCredentials: true
             })
-            .then((result) => {
-                console.log(result);
+            .then(() => {
                 console.log('[Success] 게시글 삭제');
                 this.$router.push({ name: 'home' });
             })
@@ -135,7 +138,6 @@ export default {
             withCredentials: true
         })
         .then((result) => {
-            console.log(result);
             this.article = result.data.article;
             this.comments = result.data.comments;
             this.didLike = result.data.didLike;
