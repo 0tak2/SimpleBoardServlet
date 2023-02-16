@@ -96,7 +96,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .controls {
     margin-top: 15px;
 }

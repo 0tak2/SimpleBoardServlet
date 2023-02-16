@@ -43,4 +43,24 @@ public class MemberDAO {
 		return affectedRows;
 	}
 
+	public int update(Member member) {
+		int affectedRows = 0;
+		try {
+			affectedRows = session.update("myMember.update", member);
+		} catch (Exception e) {
+			throw e;
+		}
+		return affectedRows;
+	}
+
+	public int updateToEmpty(Member param) {
+		int affectedRows = 0;
+		try {
+			affectedRows = session.update("myMember.updateToEmpty", param);
+		} catch (Exception e) {
+			throw e;
+		}
+		return affectedRows;
+	}
+
 }

@@ -91,6 +91,7 @@ export default {
 <style scoped>
 .page-indicator {
   text-align: center;
+  margin-top: 20px;
 }
 
 .page-num-link {

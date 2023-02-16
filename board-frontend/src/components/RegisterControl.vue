@@ -102,8 +102,10 @@ export default {
     },
     watch: {
         userID(newVal) {
-            axios.get(this.baseUrl + 'member', {
-                params: { userID: newVal }
+            axios.get(this.baseUrl + 'member/' + newVal, {
+                params: {
+                    checkExist: 'true'
+                }
             },
             { withCredentials: true })
             .then(() => {

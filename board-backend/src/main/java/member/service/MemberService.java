@@ -41,15 +41,47 @@ public class MemberService {
 		return result;
 	}
 
-	public boolean isExist(Member newMember) {
+	public Member getMember(Member newMember) {
+		Member result = null;
+		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+			MemberDAO dao = new MemberDAO(sqlSession);
+			result = dao.select(newMember);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public boolean editMemberInfo(Member member) {
 		boolean result = false;
 		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
 			MemberDAO dao = new MemberDAO(sqlSession);
-			Member member = dao.select(newMember);
+			int affectedRows = dao.update(member);
 			
-			if (member != null) { // is exist
+			if (affectedRows == 1) {
+				sqlSession.commit();
 				result = true;
 			} else {
+				sqlSession.rollback();
+				result = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
+	public boolean getOut(Member param) {
+		boolean result = false;
+		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+			MemberDAO dao = new MemberDAO(sqlSession);
+			int affectedRows = dao.updateToEmpty(param);
+			
+			if (affectedRows == 1) {
+				sqlSession.commit();
+				result = true;
+			} else {
+				sqlSession.rollback();
 				result = false;
 			}
 		} catch (Exception e) {

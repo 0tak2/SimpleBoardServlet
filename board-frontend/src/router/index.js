@@ -6,6 +6,7 @@ import ArticleView from '../views/ArticleView.vue'
 import WriteView from '../views/WriteView.vue'
 import EditView from '../views/EditView.vue';
 import RegisterView from '../views/RegisterView.vue';
+import EditMemberView from '../views/EditMemberView.vue';
 
 Vue.use(VueRouter)
 
@@ -39,6 +40,11 @@ const routes = [
     path: '/member/register',
     name: 'registerMember',
     component: RegisterView
+  },
+  {
+    path: '/member/edit',
+    name: 'editMemberInfo',
+    component: EditMemberView
   }
 ]
 

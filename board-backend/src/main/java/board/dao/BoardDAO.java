@@ -34,7 +34,7 @@ public class BoardDAO {
 		// 데이터베이스 처리 - MyBatis 이용
 		List<ArticleExtended> result = null;
 		try {
-			result = session.selectList("myBoard.selectAllArticles");			
+			result = session.selectList("myBoard.selectAllArticles");
 		} catch (Exception e) {
 			throw e;
 		}

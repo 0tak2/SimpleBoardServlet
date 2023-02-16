@@ -9,6 +9,7 @@
     </v-card-text>
     <v-card-actions>
       <v-btn text @click="requestLogout">로그아웃</v-btn>
+      <v-btn text @click="() => $router.push({ name: 'editMemberInfo'} )">정보 수정</v-btn>
     </v-card-actions>
   </v-card>
 </template>

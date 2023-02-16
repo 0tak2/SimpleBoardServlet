@@ -29,5 +29,21 @@
 			VALUES(#{memberId}, #{memberName}, #{memberPw})
 		]]>
 	</insert>
+	
+	<update id="update" parameterType="Member">
+		<![CDATA[
+			UPDATE members
+			SET memberName=#{memberName}, memberPw=#{memberPw}
+			WHERE memberId = #{memberId}
+		]]>
+	</update>
+	
+	<update id="updateToEmpty" parameterType="Member">
+		<![CDATA[
+			UPDATE members
+			SET memberName='', memberPw=''
+			WHERE memberId = #{memberId}
+		]]>
+	</update>
 
 </mapper>
