@@ -95,12 +95,7 @@ public class MemberServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 로그인 검사
-		boolean isLogin = CheckLogin.checkLogin(request, response);
-		if (!isLogin) {
-			return;
-		}
-		
+		// 회원가입용이므로 로그인 체크 하지 않음
 		request.setCharacterEncoding("UTF-8");
 		StringBuffer buff = new StringBuffer();
 		String line = null;
