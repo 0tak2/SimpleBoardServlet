@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import RegisterControl from '@/components/RegisterControl.vue';
+  import RegisterControl from '@/components/member/RegisterControl.vue';
 
   export default {
     name: 'RegisterView',

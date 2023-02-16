@@ -8,8 +8,8 @@
 </template>
 
 <script>
-  import LoginCheck from "../components/LoginCheck.vue";
-  import EditMemberControl from '@/components/EditMemberControl.vue';
+  import LoginCheck from "../components/common/LoginCheck.vue";
+  import EditMemberControl from '@/components/member/EditMemberControl.vue';
 
   export default {
     name: 'EditView',

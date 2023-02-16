@@ -22,9 +22,9 @@
 </template>
 
 <script>
-  import UserPanel from '../components/UserPanel.vue';
-  import ArticleList from '../components/ArticleList.vue';
-  import LoginCheck from '../components/LoginCheck.vue';
+  import UserPanel from '../components/board/UserPanel.vue';
+  import ArticleList from '../components/board/ArticleList.vue';
+  import LoginCheck from '../components/common/LoginCheck.vue';
 
   export default {
     name: 'HomeView',

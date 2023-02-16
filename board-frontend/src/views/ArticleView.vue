@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import ArticlePanel from '@/components/ArticlePanel.vue'
-import LoginCheck from '@/components/LoginCheck.vue'
+import ArticlePanel from '@/components/board/ArticlePanel.vue'
+import LoginCheck from '@/components/common/LoginCheck.vue'
   export default {
     name: 'ArticleView',
     components: {

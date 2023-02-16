@@ -5,7 +5,7 @@
 </template>
 
 <script>
-  import LoginControl from '@/components/LoginControl.vue';
+  import LoginControl from '@/components/member/LoginControl.vue';
 
   export default {
     name: 'HomeView',

@@ -1,5 +1,7 @@
 # board-frontend
 
+SimpleBoardServlet의 프론트엔드입니다.
+
 ## Project setup
 ```
 npm install

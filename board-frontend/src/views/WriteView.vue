@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import LoginCheck from "../components/LoginCheck.vue";
-  import WriteControl from "../components/WriteControl.vue";
+  import LoginCheck from "../components/common/LoginCheck.vue";
+  import WriteControl from "../components/board/WriteControl.vue";
   export default {
     name: 'WriteView',
 
