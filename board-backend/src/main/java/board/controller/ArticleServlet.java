@@ -22,6 +22,7 @@ import board.vo.ArticleExtended;
 import board.vo.Comment;
 import board.vo.Like;
 import common.util.CheckLogin;
+import common.vo.BasicSelectVO;
 import member.vo.Member;
 
 /**
@@ -38,8 +39,8 @@ public class ArticleServlet extends HttpServlet {
         super();
         // TODO Auto-generated constructor stub
     }
-
-	/** 게시글 조회
+    
+    /** 게시글 조회
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -49,60 +50,93 @@ public class ArticleServlet extends HttpServlet {
 			return;
 		}
 		
-		Map<String, Object> resp = new HashMap<String, Object>(); // 응답 객체
-		
 		String[] urlChunks = request.getRequestURL().toString().split("/");
 		if (urlChunks[urlChunks.length-1].equals("article")) {
 			// 전체 게시글 조회
 			// 	/boardApi/article
-			List<ArticleExtended> list = null;
-			BoardService service = new BoardService();
-			list = service.getAllArticles();
-			
-			response.setContentType("application/json; charset=UTF-8");
-		    
-		    if (list != null) {
-				resp.put("success", new Boolean(true));
-				resp.put("msg", "전체 게시글을 성공적으로 가져왔습니다.");
-				resp.put("articles", list);
-		    } else {
-		    	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-				resp.put("success", new Boolean(false));
-				resp.put("msg", "게시글을 가져오는데 실패했습니다.");
-		    }
+			getArticlesAndSendResponse(request, response);
 		} else {
 			// 특정 게시글 조회
 			// 	/boardApi/article/:articleNum
-			HttpSession session = request.getSession();
-			Member currentUser = (Member)session.getAttribute("member");
-			
-			int articleNum = Integer.parseInt(urlChunks[urlChunks.length-1]);
-			BoardService service = new BoardService();
-			Article articleParam = new Article();
-			articleParam.setArticleNum(articleNum);
-			ArticleExtended result = service.getArticle(articleParam);
-			
-			List<Comment> commentsList = service.getAllComments(result);
-			
-			Like likeParam = new Like();
-			likeParam.setLikeArticle(articleNum);
-			likeParam.setLikeMemberId(currentUser.getMemberId());
-			
-			boolean didLike = false;
-			Like like = service.getLike(likeParam);
-			if (like != null) {
-				didLike = true;
-			} else {
-				didLike = false;
-			}
-			
-			// 3. 출력
+			getOneArticleAndSendResponse(request, response);
+		}
+	}
+
+	private void getArticlesAndSendResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		int size = Integer.parseInt(request.getParameter("size"));
+		int page = Integer.parseInt(request.getParameter("page"));
+		BasicSelectVO param = new BasicSelectVO(size * (page - 1), size);
+		
+		List<ArticleExtended> list = null;
+		BoardService service = new BoardService();
+		int numOfArticles = service.getNumOfArticles();
+		list = service.getArticles(param);
+		
+		Map<String, Object> resp = new HashMap<String, Object>(); // 응답 객체
+	    
+	    if (list != null) {
+			resp.put("success", new Boolean(true));
+			resp.put("msg", "전체 게시글을 성공적으로 가져왔습니다.");
+			resp.put("articles", list);
+			resp.put("numOfArticles", numOfArticles);
+			resp.put("size", numOfArticles);
+			resp.put("page", numOfArticles);
+	    } else {
+	    	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			resp.put("success", new Boolean(false));
+			resp.put("msg", "게시글을 가져오는데 실패했습니다.");
+	    }
+	    
+		response.setContentType("application/json; charset=UTF-8");
+	    PrintWriter out = response.getWriter();
+	    out.print(new Gson().toJson(resp));
+	    out.close();
+	}
+	
+	private void getOneArticleAndSendResponse(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession();
+		Member currentUser = (Member)session.getAttribute("member");
+		
+		String[] urlChunks = request.getRequestURL().toString().split("/");
+		int articleNum = Integer.parseInt(urlChunks[urlChunks.length-1]);
+		BoardService service = new BoardService();
+		Article articleParam = new Article();
+		articleParam.setArticleNum(articleNum);
+		
+		Map<String, Object> resp = new HashMap<String, Object>(); // 응답 객체
+		
+		ArticleExtended result = service.getArticle(articleParam);
+	    if (result != null) {
+			resp.put("article", result);
+	    } else {
+	    	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			resp.put("success", new Boolean(false));
+			resp.put("msg", "게시글을 가져오는데 실패했습니다.");
+	    }
+		
+		List<Comment> commentsList = service.getAllComments(result);
+	    if (result != null) {
 			resp.put("success", new Boolean(true));
 			resp.put("msg", "게시글을 성공적으로 불러왔습니다.");
-			resp.put("article", result);
 			resp.put("comments", commentsList);
-			resp.put("didLike", didLike);
+	    } else {
+	    	response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			resp.put("success", new Boolean(false));
+			resp.put("msg", "댓글을 가져오는데 실패했습니다.");
+	    }
+		
+		Like likeParam = new Like();
+		likeParam.setLikeArticle(articleNum);
+		likeParam.setLikeMemberId(currentUser.getMemberId());
+		
+		boolean didLike = false;
+		Like like = service.getLike(likeParam);
+		if (like != null) {
+			didLike = true;
+		} else {
+			didLike = false;
 		}
+		resp.put("didLike", didLike);
 		
 		response.setContentType("application/json; charset=UTF-8");
 	    PrintWriter out = response.getWriter();

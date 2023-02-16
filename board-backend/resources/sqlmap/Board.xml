@@ -4,6 +4,12 @@
           "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
           
 <mapper namespace="myBoard">
+	<select id="selectArticleCounts" resultType="BasicSelect">		
+		<![CDATA[
+			SELECT COUNT(*) AS numOfRows FROM articles
+		]]>
+	</select>
+	
 	<select id="selectAllArticles" resultType="ArticleExtended">		
 		<![CDATA[
 			SELECT articleNum, articleTitle, articleContent, articleAuthor, memberName, articleDate,
@@ -25,6 +31,32 @@
 			) C
 			ON A.articleNum = C.commentArticle
 			ORDER BY articleNum DESC;
+		]]>
+	</select>
+	
+	<select id="selectArticles" parameterType="BasicSelect" resultType="ArticleExtended">		
+		<![CDATA[
+			SELECT articleNum, articleTitle, articleContent, articleAuthor, memberName, articleDate,
+					IF(likeCount IS NULL, 0, likeCount) AS articleLike,
+					IF(commentCount IS NULL, 0, commentCount) AS articleComments
+			FROM articles A
+			INNER JOIN members M
+			ON A.articleAuthor = M.memberId
+			LEFT JOIN (
+				SELECT likeArticle, COUNT(likeMemberId) AS likeCount
+				FROM likes
+				GROUP BY likeArticle
+			) L
+			ON A.articleNum = L.likeArticle
+			LEFT JOIN (
+				SELECT commentArticle, COUNT(commentNum) AS commentCount
+				FROM comments
+				GROUP BY commentArticle
+			) C
+			ON A.articleNum = C.commentArticle
+			ORDER BY articleNum
+			DESC
+			LIMIT #{start}, #{end};
 		]]>
 	</select>
 	

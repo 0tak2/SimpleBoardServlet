@@ -27,6 +27,7 @@
 	 	<typeAlias type="board.vo.ArticleExtended" alias="ArticleExtended"/>
 	 	<typeAlias type="board.vo.Comment" alias="Comment" />
 	 	<typeAlias type="board.vo.Like" alias="Like" />
+	 	<typeAlias type="common.vo.BasicSelectVO" alias="BasicSelect" />
 	 </typeAliases>
 
 	<!-- Database 연결 정보 선언 -->

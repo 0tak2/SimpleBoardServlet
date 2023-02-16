@@ -8,6 +8,7 @@ import board.vo.Article;
 import board.vo.ArticleExtended;
 import board.vo.Comment;
 import board.vo.Like;
+import common.vo.BasicSelectVO;
 
 public class BoardDAO {
 	private SqlSession session;
@@ -17,6 +18,16 @@ public class BoardDAO {
 	
 	public BoardDAO(SqlSession session) {
 		this.session = session;
+	}
+
+	public BasicSelectVO selectArticleCounts() {
+		BasicSelectVO result = null;
+		try {
+			result = session.selectOne("myBoard.selectArticleCounts");			
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
 	}
 
 	public List<ArticleExtended> selectAllArticles() {
@@ -30,6 +41,17 @@ public class BoardDAO {
 		return result;
 	}
 	
+	public List<ArticleExtended> selectArticles(BasicSelectVO param) {
+		// 데이터베이스 처리 - MyBatis 이용
+		List<ArticleExtended> result = null;
+		try {
+			result = session.selectList("myBoard.selectArticles", param);			
+		} catch (Exception e) {
+			throw e;
+		}
+		return result;
+	}
+
 	public ArticleExtended selectOneArticle(Article articleParam) {
 		ArticleExtended result = null;
 		try {
@@ -70,7 +92,7 @@ public class BoardDAO {
 		return affectedRows;
 	}
 
-	public List<Comment> selectAllComments(ArticleExtended param) {
+	public List<Comment> selectAllComments(Article param) {
 		List<Comment> result = null;
 		try {
 			result = session.selectList("myBoard.selectAllComments", param);			

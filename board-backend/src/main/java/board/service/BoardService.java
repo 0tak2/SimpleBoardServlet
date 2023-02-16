@@ -11,14 +11,37 @@ import board.vo.Comment;
 import board.vo.Like;
 import common.mybatis.MyBatisConnectionFactory;
 import common.service.ServiceResult;
+import common.vo.BasicSelectVO;
 
 public class BoardService {
+
+	public int getNumOfArticles() {
+		BasicSelectVO result = null;
+		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+			BoardDAO dao = new BoardDAO(sqlSession);
+			result = dao.selectArticleCounts();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result.getNumOfRows();
+	}
 
 	public List<ArticleExtended> getAllArticles() {
 		List<ArticleExtended> list = null;
 		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
 			BoardDAO dao = new BoardDAO(sqlSession);
 			list = dao.selectAllArticles();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public List<ArticleExtended> getArticles(BasicSelectVO param) {
+		List<ArticleExtended> list = null;
+		try (SqlSession sqlSession = MyBatisConnectionFactory.getSqlSessionFactory().openSession()) {
+			BoardDAO dao = new BoardDAO(sqlSession);
+			list = dao.selectArticles(param);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
