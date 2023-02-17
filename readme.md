@@ -2,7 +2,8 @@
 
 기본 서블릿과 Vue.js를 이용하여 작성한 게시판 프로젝트입니다.
 백엔드에 CORS 처리를 위한 필터가 있어 프론트엔드와 백엔드를
-별도의 서버에서 기동할 수 있습니다.
+별도의 서버에서 기동할 수 있습니다.  
+프론트엔드를 별도로 구성하지 않고, JSP 기반의 뷰를 구성한 이전 프로젝트는 [여기](https://github.com/0tak2/KOSAjava/tree/main/Projects-With-Servlet/BoardProject0209)서 볼 수 있습니다.
 
 ## 테스트 인스트럭션
 
